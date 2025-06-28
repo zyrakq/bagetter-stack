@@ -1,0 +1,4 @@
+services:
+  bagetter:
+    ports:
+      - "5555:8080"

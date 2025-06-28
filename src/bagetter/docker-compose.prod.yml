@@ -1,0 +1,6 @@
+services:
+  bagetter:
+    environment:
+      ApiKey: ${API_KEY}
+      Authentication__Credentials__0__Username: ${BAGETTER_USERNAME}
+      Authentication__Credentials__0__Password: ${BAGETTER_PASSWORD}
