@@ -1,0 +1,21 @@
+services:
+  bagetter:
+    container_name: bagetter
+    build: .
+    volumes:
+      - bagetter:/data
+    environment:
+      Search__Type: ${SEARCH__TYPE:-Database}
+      AllowPackageOverwrites: ${ALLOW_PACKAGE_OWERWRITERS:-true}
+      Storage__Type: ${STORAGE__TYPE:-FileSystem}
+      Storage__Path: ${STORAGE__PATH:-/data}
+      Database__Type: ${DATABASE__TYPE:-Sqlite}
+      Database__ConnectionString: ${DATABASE__CONNECTIONSTRING}
+      ApiKey: ${API_KEY}
+      Authentication__Credentials__0__Username: ${BAGETTER_USERNAME}
+      Authentication__Credentials__0__Password: ${BAGETTER_PASSWORD}
+    ports:
+      - "5555:8080"
+volumes:
+  bagetter:
+    name: bagetter

@@ -1,0 +1,28 @@
+services:
+  bagetter:
+    container_name: bagetter
+    build: .
+    volumes:
+      - bagetter:/data
+    environment:
+      Search__Type: ${SEARCH__TYPE:-Database}
+      AllowPackageOverwrites: ${ALLOW_PACKAGE_OWERWRITERS:-true}
+      Storage__Type: ${STORAGE__TYPE:-FileSystem}
+      Storage__Path: ${STORAGE__PATH:-/data}
+      Database__Type: ${DATABASE__TYPE:-Sqlite}
+      Database__ConnectionString: ${DATABASE__CONNECTIONSTRING}
+      VIRTUAL_PORT: ${VIRTUAL_PORT:-8080}
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+      ApiKey: ${API_KEY}
+      Authentication__Credentials__0__Username: ${BAGETTER_USERNAME}
+      Authentication__Credentials__0__Password: ${BAGETTER_PASSWORD}
+    networks:
+      - step-ca-network
+volumes:
+  bagetter:
+    name: bagetter
+networks:
+  step-ca-network:
+    external: true
