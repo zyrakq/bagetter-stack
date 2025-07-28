@@ -2,25 +2,27 @@
 
 A comprehensive Docker stack for running BaGetter NuGet server with certificate management solutions.
 
-## 📦 Components
+A lightweight NuGet and symbol server implementation. Perfect for hosting private NuGet packages with Docker support.
+
+## 🧩 Components
+
+### 🔐 SSL Automation
+
+#### [🔒 Let's Encrypt Manager](src/ssl-automation/letsencrypt-manager)
+
+Automatic SSL certificate management from Let's Encrypt for production deployments. Provides seamless HTTPS integration for Docker containers using nginx-proxy and acme-companion.
+[Learn more about Let's Encrypt Manager configuration](src/ssl-automation/letsencrypt-manager/README.md).
+
+#### [🏠 Step CA Manager](src/ssl-automation/step-ca-manager)
+
+Local domain stack with trusted self-signed certificates for virtual network deployments. Includes private CA management and local DNS resolution for development environments.
+[Learn more about Step CA Manager configuration](src/ssl-automation/step-ca-manager/README.md).
+
+## 🌐 Services
 
 ### 🍰 BaGetter
 
 **Location:** [`src/bagetter/`](src/bagetter/)
-
-A lightweight NuGet and symbol server implementation. Perfect for hosting private NuGet packages with Docker support.
-
-### 🔒 Let's Encrypt Manager
-
-**Location:** [`src/letsencrypt-manager/`](src/letsencrypt-manager/)
-
-Production-ready certificate management using Let's Encrypt for automatic SSL/TLS certificate provisioning and renewal in production environments.
-
-### 🛡️ Step CA Manager  
-
-**Location:** [`src/step-ca-manager/`](src/step-ca-manager/)
-
-Self-signed certificate authority manager for virtual network deployments. Provides trusted certificates for internal/development environments without external dependencies.
 
 ## 🎯 Use Cases
 
