@@ -2,8 +2,8 @@ services:
   bagetter:
     container_name: bagetter
     build: .
-    volumes:
-      - bagetter:/data
+    image: bagetter
+    restart: unless-stopped
     environment:
       Search__Type: ${SEARCH__TYPE:-Database}
       AllowPackageOverwrites: ${ALLOW_PACKAGE_OWERWRITERS:-true}
@@ -11,6 +11,13 @@ services:
       Storage__Path: ${STORAGE__PATH:-/data}
       Database__Type: ${DATABASE__TYPE:-Sqlite}
       Database__ConnectionString: ${DATABASE__CONNECTIONSTRING}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: 3
+    volumes:
+      - bagetter:/data
 
 volumes:
   bagetter:

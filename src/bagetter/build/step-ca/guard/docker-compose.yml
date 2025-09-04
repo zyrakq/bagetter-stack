@@ -2,8 +2,8 @@ services:
   bagetter:
     container_name: bagetter
     build: .
-    volumes:
-      - bagetter:/data
+    image: bagetter
+    restart: unless-stopped
     environment:
       Search__Type: ${SEARCH__TYPE:-Database}
       AllowPackageOverwrites: ${ALLOW_PACKAGE_OWERWRITERS:-true}
@@ -18,6 +18,13 @@ services:
       ApiKey: ${API_KEY}
       Authentication__Credentials__0__Username: ${BAGETTER_USERNAME}
       Authentication__Credentials__0__Password: ${BAGETTER_PASSWORD}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: 3
+    volumes:
+      - bagetter:/data
     networks:
       - step-ca-network
 volumes:
