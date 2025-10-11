@@ -1,0 +1,8 @@
+services:
+  bagetter:
+    networks:
+      - bagetter-workspace-network
+
+networks:
+  bagetter-workspace-network:
+    external: true

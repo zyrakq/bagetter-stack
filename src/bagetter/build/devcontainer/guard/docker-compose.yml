@@ -1,0 +1,31 @@
+services:
+  bagetter:
+    container_name: bagetter
+    build: .
+    image: bagetter
+    restart: unless-stopped
+    environment:
+      Search__Type: ${SEARCH__TYPE:-Database}
+      AllowPackageOverwrites: ${ALLOW_PACKAGE_OWERWRITERS:-true}
+      Storage__Type: ${STORAGE__TYPE:-FileSystem}
+      Storage__Path: ${STORAGE__PATH:-/data}
+      Database__Type: ${DATABASE__TYPE:-Sqlite}
+      Database__ConnectionString: ${DATABASE__CONNECTIONSTRING}
+      ApiKey: ${API_KEY}
+      Authentication__Credentials__0__Username: ${BAGETTER_USERNAME}
+      Authentication__Credentials__0__Password: ${BAGETTER_PASSWORD}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: 3
+    volumes:
+      - bagetter:/data
+    networks:
+      - bagetter-workspace-network
+volumes:
+  bagetter:
+    name: bagetter
+networks:
+  bagetter-workspace-network:
+    external: true

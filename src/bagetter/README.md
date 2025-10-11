@@ -2,57 +2,21 @@
 
 A modular Docker Compose configuration system for BaGetter NuGet server with support for multiple environments and extensions.
 
-## 🏗️ Project Structure
-
-```sh
-src/bagetter/
-├── components/                              # Source compose components
-│   ├── base/                               # Base components
-│   │   ├── docker-compose.yml              # Main BaGetter service
-│   │   ├── .env.example                    # Base environment variables
-│   │   └── Dockerfile                      # BaGetter Dockerfile
-│   ├── environments/                       # Environment components
-│   │   ├── forwarding/
-│   │   │   └── docker-compose.yml          # Development with port forwarding
-│   │   ├── letsencrypt/
-│   │   │   ├── docker-compose.yml          # Let's Encrypt SSL
-│   │   │   └── .env.example                # Let's Encrypt variables
-│   │   └── step-ca/
-│   │       ├── docker-compose.yml          # Step CA SSL
-│   │       └── .env.example                # Step CA variables
-│   └── extensions/                         # Extension components
-│       └── guard/
-│           ├── docker-compose.yml          # Authentication and API keys
-│           └── .env.example                # Authentication variables
-├── build/                        # Generated configurations (auto-generated)
-│   ├── forwarding/
-│   │   ├── base/                 # Development + base configuration
-│   │   └── guard/                # Development + authentication
-│   ├── letsencrypt/
-│   │   ├── base/                 # Let's Encrypt + base configuration
-│   │   └── guard/                # Let's Encrypt + authentication
-│   └── step-ca/
-│       ├── base/                 # Step CA + base configuration
-│       └── guard/                # Step CA + authentication
-├── build.sh                      # Build script
-└── README.md                     # This file
-```
-
 ## 🚀 Quick Start
 
 ### 1. Build Configurations
 
-Run the build script to generate all possible combinations:
+Generate all possible configurations using stackbuilder:
 
 ```bash
-./build.sh
+sb build
 ```
 
-This will create all combinations in the `build/` directory.
+This creates ready-to-use Docker Compose configurations in the `build/` directory.
 
 ### 2. Choose Your Configuration
 
-Navigate to the desired configuration directory:
+Navigate to the desired configuration:
 
 ```bash
 # For development with port forwarding
@@ -60,9 +24,6 @@ cd build/forwarding/base/
 
 # For production with Let's Encrypt SSL
 cd build/letsencrypt/base/
-
-# For production with Step CA SSL
-cd build/step-ca/base/
 
 # For development with authentication
 cd build/forwarding/guard/
@@ -82,7 +43,7 @@ cp .env.example .env
 Start the services:
 
 ```bash
-docker-compose up -d
+docker compose up --build -d
 ```
 
 Access: `http://localhost:5555` (for forwarding mode)
@@ -162,24 +123,20 @@ dotnet nuget add source http://localhost:5555/v3/index.json --name BaGetter
 
 ## 🛠️ Development
 
+### Project Structure
+
+- **`components/`** - Source files used to build final configurations
+- **`build/`** - Generated Docker Compose configurations ready to deploy
+
 ### Adding New Environments
 
 1. Create directory in `components/environments/` with `docker-compose.yml` and optional `.env.example` file
-2. Run `./build.sh` to generate new combinations
+2. Run `sb build` to generate new combinations
 
-### File Naming Convention
-
-All component files follow the standard Docker Compose naming convention (`docker-compose.yml`) for:
-
-- **VS Code compatibility**: Full support for Docker Compose language features and IntelliSense
-- **IDE integration**: Proper syntax highlighting and validation in all major editors
-- **Tool compatibility**: Works with Docker Compose plugins and extensions
-- **Standard compliance**: Follows official Docker Compose file naming patterns
-
-### Modifying Existing Components
+### Modifying Components
 
 1. Edit the component files in `components/`
-2. Run `./build.sh` to regenerate configurations
+2. Run `sb build` to regenerate configurations
 3. The `build/` directory will be completely recreated
 
 ## 🌐 Networks
@@ -201,7 +158,7 @@ All component files follow the standard Docker Compose naming convention (`docke
 
 **Build Issues:**
 
-- Ensure `yq` is installed: <https://github.com/mikefarah/yq#install>
+- Ensure stackbuilder is installed: <https://github.com/zyrakq/stackbuilder>
 - Check component file syntax
 - Verify all required files exist
 
@@ -221,22 +178,4 @@ All component files follow the standard Docker Compose naming convention (`docke
 - The `build/` directory is automatically generated and should not be edited manually
 - Environment variables in generated files use `$VARIABLE_NAME` format for proper interpolation
 - Each generated configuration includes a complete `docker-compose.yml` and `.env.example`
-- Missing `.env.*` files for components are handled gracefully by the build script
-
-## 🔄 Migration from Legacy Deploy Script
-
-The legacy `deploy.sh` script is still available for compatibility, but the new build system is recommended:
-
-**Legacy approach:**
-
-```bash
-./deploy.sh --production --letsencrypt
-```
-
-**New approach:**
-
-```bash
-./build.sh
-cd build/letsencrypt/guard/
-cp .env.example .env
-docker-compose up -d
+- Missing `.env.*` files for components are handled gracefully by the build system
